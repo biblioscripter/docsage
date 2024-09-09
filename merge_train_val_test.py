@@ -3,9 +3,17 @@ import shutil
 from glob import glob
 
 def get_subfolder_names(path):
-    subfolders = glob(os.path.join(path, '**', '*/'), recursive=True) # Find all subfolders recursively
+    subfolders = glob(os.path.join(path, '**', '*/'), recursive=True)
     subfolder_names = [os.path.basename(os.path.normpath(subfolder)) for subfolder in subfolders]
     return subfolders, subfolder_names
+
+def get_num_images(subfolders):
+    sum = 0
+    for subfolder in subfolders:
+        num_images = len(glob(os.path.join(subfolder, "*")))
+        sum += num_images
+        print(f"Number of images in {subfolder}: {num_images}")
+    print(f"Total number of images: {sum}")
 
 def create_folders_from_names(base_dir, subfolder_names):
     for name in subfolder_names:
@@ -26,10 +34,10 @@ def copy_images_to_folders(subfolders, base_dir):
 
 def process_folder(folder_path, base_dir):
     subfolders, subfolder_names = get_subfolder_names(folder_path)
+    get_num_images(subfolders)
     create_folders_from_names(base_dir, subfolder_names)
     copy_images_to_folders(subfolders, base_dir)
 
-# Example usage:
 main_folders = ['train', 'val', 'test'] 
 base_dir = '.'         
 
